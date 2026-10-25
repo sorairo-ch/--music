@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -6,26 +7,236 @@
   <title>ソライロ music</title>
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      background-color: #111827;
-      color: white;
-      text-align: center;
+      margin: 0;
+      background: #0b1020;
+      color: #f8fafc;
       font-family: sans-serif;
-      padding: 40px 10px;
+      padding: 24px 16px 40px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .logo {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: #a5b4fc;
+      color: #111827;
+      font-size: 24px;
     }
 
     h1 {
+      margin: 0;
+      color: #e0e7ff;
+      font-size: 25px;
+    }
+
+    .subtitle {
+      margin: 5px 0 0;
+      color: #94a3b8;
+      font-size: 11px;
+      letter-spacing: 2px;
+    }
+
+    .hero {
+      padding: 30px 22px;
+      border: 1px solid #303b58;
+      border-radius: 24px;
+      background: linear-gradient(135deg, #1e2545, #17152f, #102b3c);
+      margin-bottom: 30px;
+    }
+
+    .tag {
+      color: #a5b4fc;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .hero h2 {
+      font-size: clamp(28px, 6vw, 42px);
+      line-height: 1.4;
+      margin: 16px 0;
+    }
+
+    .hero h2 span {
       color: #a5b4fc;
     }
 
-    p {
-      color: #d1d5db;
+    .hero p {
+      color: #cbd5e1;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+
+    .visualizer {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      height: 65px;
+      margin-top: 24px;
+    }
+
+    .visualizer span {
+      width: 5px;
+      height: var(--h);
+      border-radius: 10px;
+      background: linear-gradient(#a5b4fc, #38bdf8);
+      opacity: 0.9;
+    }
+
+    .section-title {
+      font-size: 19px;
+      margin-bottom: 15px;
+    }
+
+    .song {
+      padding: 20px;
+      border: 1px solid #303b58;
+      border-radius: 20px;
+      background: #131b30;
+      margin-bottom: 16px;
+    }
+
+    .song-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 18px;
+    }
+
+    .cover {
+      flex-shrink: 0;
+      width: 62px;
+      height: 62px;
+      display: grid;
+      place-items: center;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #51417c, #203f64);
+      font-size: 30px;
+    }
+
+    .song h3 {
+      font-size: 16px;
+      margin: 0 0 7px;
+      overflow-wrap: anywhere;
+    }
+
+    .song-info p {
+      margin: 0;
+      color: #94a3b8;
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    audio {
+      display: block;
+      width: 100%;
+      height: 45px;
+    }
+
+    .note {
+      margin-top: 12px;
+      color: #94a3b8;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    footer {
+      margin-top: 35px;
+      text-align: center;
+      color: #64748b;
+      font-size: 11px;
+      letter-spacing: 1px;
     }
   </style>
 </head>
 
 <body>
-  <h1>ソライロ music</h1>
-  <p>自作ミュージックの宝庫！</p>
+  <main class="container">
+
+    <header>
+      <div class="logo">♫</div>
+      <div>
+        <h1>ソライロ music</h1>
+        <p class="subtitle">ORIGINAL MUSIC COLLECTION</p>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="tag">WELCOME TO MY MUSIC</div>
+      <h2>好きな音に、<br><span>溺れよう。</span></h2>
+      <p>
+        ここでしか聴けない、オリジナルミュージック。<br>
+        あなたのお気に入りの一曲が見つかりますように。
+      </p>
+
+      <div class="visualizer">
+        <span style="--h:20px"></span>
+        <span style="--h:34px"></span>
+        <span style="--h:15px"></span>
+        <span style="--h:43px"></span>
+        <span style="--h:27px"></span>
+        <span style="--h:50px"></span>
+        <span style="--h:18px"></span>
+        <span style="--h:38px"></span>
+        <span style="--h:24px"></span>
+        <span style="--h:45px"></span>
+        <span style="--h:16px"></span>
+        <span style="--h:31px"></span>
+        <span style="--h:48px"></span>
+        <span style="--h:22px"></span>
+        <span style="--h:36px"></span>
+        <span style="--h:14px"></span>
+        <span style="--h:42px"></span>
+        <span style="--h:26px"></span>
+      </div>
+    </section>
+
+    <section>
+      <h2 class="section-title">♫　MUSIC LIST</h2>
+
+      <div class="song">
+        <div class="song-info">
+          <div class="cover">♫</div>
+          <div>
+            <h3>ドパドパ♡フェスティバル</h3>
+            <p>ORIGINAL SONG　・　01</p>
+          </div>
+        </div>
+
+        <audio controls preload="metadata">
+          <source src="ドパドパフェスティバル.m4a" type="audio/mp4">
+          お使いのブラウザは音声再生に対応していません。
+        </audio>
+
+        <p class="note">
+          再生ボタンを押すと曲を聴けます。
+        </p>
+      </div>
+    </section>
+
+    <footer>
+      SORAiro music ・ ORIGINAL MUSIC
+    </footer>
+
+  </main>
 </body>
 </html>
