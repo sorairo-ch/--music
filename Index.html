@@ -1,799 +1,1075 @@
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#070914">
-  <meta name="description" content="ソライロ music — 好きな音に、溺れよう。">
-  <title>ソライロ music | ORIGINAL MUSIC</title>
-
-  <style>
-    :root {
-      --bg: #070914;
-      --panel: rgba(17, 23, 46, 0.78);
-      --cyan: #43eaff;
-      --pink: #ff4fbc;
-      --purple: #a56bff;
-      --text: #f3f6ff;
-      --muted: #9ba8c8;
-      --line: rgba(116, 155, 255, 0.2);
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 85px;
-    }
-
-    body {
-      margin: 0;
-      color: var(--text);
-      background:
-        radial-gradient(ellipse at 10% 15%, #17265a55, transparent 38%),
-        radial-gradient(ellipse at 90% 35%, #56154a35, transparent 35%),
-        var(--bg);
-      font-family:
-        -apple-system, BlinkMacSystemFont, "Segoe UI",
-        "Noto Sans JP", sans-serif;
-      line-height: 1.7;
-      overflow-x: hidden;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    button, audio {
-      font: inherit;
-    }
-
-    button {
-      color: inherit;
-    }
-
-    ::selection {
-      color: #050714;
-      background: var(--cyan);
-    }
-
-    /* 動く背景 */
-
-    .background-effects {
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      overflow: hidden;
-      pointer-events: none;
-    }
-
-    .orb {
-      position: absolute;
-      width: 300px;
-      height: 300px;
-      border-radius: 50%;
-      filter: blur(90px);
-      opacity: 0.19;
-      animation: float 14s ease-in-out infinite alternate;
-    }
-
-    .orb-blue {
-      background: #146eff;
-      top: 5%;
-      left: -150px;
-    }
-
-    .orb-pink {
-      background: #ed26b2;
-      top: 45%;
-      right: -180px;
-      animation-delay: -6s;
-    }
-
-    .orb-purple {
-      background: #783dff;
-      bottom: -180px;
-      left: 30%;
-      animation-delay: -3s;
-    }
-
-    .grid-bg {
-      position: absolute;
-      inset: 0;
-      opacity: 0.12;
-      background-image:
-        linear-gradient(#5479ff30 1px, transparent 1px),
-        linear-gradient(90deg, #5479ff30 1px, transparent 1px);
-      background-size: 48px 48px;
-      mask-image: linear-gradient(to bottom, black, transparent 90%);
-    }
-
-    @keyframes float {
-      from { transform: translate(0, 0) scale(1); }
-      to { transform: translate(45px, -35px) scale(1.2); }
-    }
-
-    /* ヘッダー */
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      border-bottom: 1px solid var(--line);
-      background: #070914d9;
-      backdrop-filter: blur(18px);
-    }
-
-    .header-inner {
-      width: min(1100px, 92%);
-      min-height: 68px;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .logo {
-      font-size: 1.12rem;
-      font-weight: 850;
-      letter-spacing: 0.03em;
-    }
-
-    .logo span {
-      color: var(--cyan);
-      text-shadow: 0 0 15px #43eaff85;
-    }
-
-    nav {
-      display: flex;
-      gap: 22px;
-      font-size: 0.78rem;
-      color: var(--muted);
-    }
-
-    nav a:hover {
-      color: var(--cyan);
-    }
-
-    /* メインビジュアル */
-
-    .hero {
-      width: min(1100px, 92%);
-      min-height: 420px;
-      margin: auto;
-      padding: 90px 0 75px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: flex-start;
-    }
-
-    .eyebrow {
-      color: var(--cyan);
-      font-size: 0.72rem;
-      font-weight: 800;
-      letter-spacing: 0.22em;
-    }
-
-    .hero h1 {
-      margin: 16px 0 10px;
-      font-size: clamp(3rem, 9vw, 6.5rem);
-      line-height: 1.08;
-      letter-spacing: -0.055em;
-      text-shadow:
-        0 0 24px #43eaff25,
-        0 0 55px #a56bff20;
-    }
-
-    .hero h1 .accent {
-      color: var(--cyan);
-    }
-
-    .hero-description {
-      margin: 15px 0 28px;
-      color: #bdc7e3;
-      font-size: clamp(0.95rem, 2vw, 1.15rem);
-    }
-
-    .hero-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 21px;
-      color: #061019;
-      font-size: 0.9rem;
-      font-weight: 800;
-      border-radius: 8px;
-      background: var(--cyan);
-      box-shadow: 0 0 22px #43eaff35;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-
-    .hero-button:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 0 32px #43eaff70;
-    }
-
-    /* セクション */
-
-    .section {
-      width: min(1100px, 92%);
-      margin: 0 auto;
-      padding: 35px 0 75px;
-    }
-
-    .section-heading {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 15px;
-      margin-bottom: 26px;
-    }
-
-    .section-heading h2 {
-      margin: 5px 0 0;
-      font-size: clamp(1.5rem, 4vw, 2.2rem);
-    }
-
-    .section-heading p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.8rem;
-    }
-
-    /* 楽曲カード */
-
-    .music-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-      gap: 22px;
-    }
-
-    .track-card {
-      min-width: 0;
-      padding: 17px;
-      overflow: hidden;
-      border: 1px solid var(--line);
-      border-radius: 17px;
-      background: var(--panel);
-      box-shadow: 0 15px 45px #00000020;
-      transition: border-color 0.25s, transform 0.25s;
-    }
-
-    .track-card:hover {
-      transform: translateY(-4px);
-      border-color: #43eaff80;
-    }
-
-    /* ジャケット風ビジュアル */
-
-    .cover {
-      position: relative;
-      isolation: isolate;
-      display: grid;
-      place-items: center;
-      aspect-ratio: 1 / 1;
-      overflow: hidden;
-      border-radius: 11px;
-      background:
-        radial-gradient(circle at 30% 30%, #43eaff55, transparent 32%),
-        radial-gradient(circle at 70% 70%, #ff4fbc55, transparent 35%),
-        linear-gradient(135deg, #101c3b, #170d29 65%, #080b18);
-    }
-
-    .cover::before,
-    .cover::after {
-      content: "";
-      position: absolute;
-      z-index: -1;
-      width: 65%;
-      aspect-ratio: 1;
-      border: 1px solid #43eaff75;
-      border-radius: 50%;
-      box-shadow: 0 0 25px #43eaff20, inset 0 0 25px #43eaff10;
-      transform: rotate(-25deg) scaleY(0.55);
-    }
-
-    .cover::after {
-      width: 80%;
-      border-color: #ff4fbc80;
-      transform: rotate(35deg) scaleY(0.55);
-    }
-
-    .cover-number {
-      position: absolute;
-      top: 13px;
-      left: 15px;
-      color: #a9b9e8;
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-    }
-
-    .cover-symbol {
-      font-size: clamp(3rem, 10vw, 5rem);
-      font-weight: 900;
-      color: white;
-      text-shadow:
-        0 0 10px var(--cyan),
-        0 0 35px #43eaff99,
-        0 0 60px #ff4fbc55;
-    }
-
-    .cover-caption {
-      position: absolute;
-      bottom: 14px;
-      left: 15px;
-      color: var(--cyan);
-      font-size: 0.65rem;
-      letter-spacing: 0.18em;
-    }
-
-    .track-info {
-      padding-top: 17px;
-    }
-
-    .track-tag {
-      color: var(--pink);
-      font-size: 0.67rem;
-      font-weight: 800;
-      letter-spacing: 0.12em;
-    }
-
-    .track-info h3 {
-      margin: 5px 0 6px;
-      font-size: 1.25rem;
-      overflow-wrap: anywhere;
-    }
-
-    .track-description {
-      min-height: 3.4em;
-      margin: 0 0 15px;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    /* プレイヤー */
-
-    audio {
-      display: block;
-      width: 100%;
-      height: 43px;
-      margin: 8px 0 13px;
-      border-radius: 9px;
-      accent-color: var(--cyan);
-    }
-
-    .track-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 9px;
-    }
-
-    .small-button {
-      padding: 8px 12px;
-      border: 1px solid #52638b;
-      border-radius: 7px;
-      background: #10162a;
-      font-size: 0.8rem;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    .small-button:hover,
-    .small-button[aria-expanded="true"] {
-      color: var(--cyan);
-      border-color: var(--cyan);
-      box-shadow: 0 0 12px #43eaff20;
-    }
-
-    .lyrics {
-      margin-top: 14px;
-      padding: 15px;
-      border-left: 2px solid var(--pink);
-      border-radius: 0 8px 8px 0;
-      background: #080c1c;
-      color: #dce5ff;
-      font-size: 0.85rem;
-      white-space: pre-wrap;
-    }
-
-    .lyrics[hidden] {
-      display: none;
-    }
-
-    .lyrics-note {
-      color: var(--muted);
-      font-size: 0.75rem;
-    }
-
-    /* 追加予定エリア */
-
-    .coming-soon {
-      padding: 28px;
-      text-align: center;
-      border: 1px dashed #56638a;
-      border-radius: 14px;
-      background: #0c1022a8;
-    }
-
-    .coming-soon strong {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--cyan);
-      letter-spacing: 0.1em;
-    }
-
-    .coming-soon p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 0.85rem;
-    }
-
-    footer {
-      padding: 30px 5%;
-      border-top: 1px solid var(--line);
-      text-align: center;
-      color: var(--muted);
-      font-size: 0.75rem;
-    }
-
-    footer span {
-      color: var(--cyan);
-    }
-
-    @media (max-width: 520px) {
-      .header-inner {
-        min-height: 62px;
-        gap: 10px;
-      }
-
-      .logo {
-        font-size: 0.98rem;
-      }
-
-      nav {
-        gap: 12px;
-        font-size: 0.7rem;
-      }
-
-      .hero {
-        min-height: 350px;
-        padding: 70px 0 55px;
-      }
-
-      .section {
-        padding-bottom: 55px;
-      }
-
-      .section-heading {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .track-card {
-        padding: 13px;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *,
-      *::before,
-      *::after {
-        scroll-behavior: auto !important;
-        animation: none !important;
-        transition: none !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090914">
+<title>ソライロMusic</title>
+
+<style>
+:root {
+  --bg: #090914;
+  --panel: #131222;
+  --panel-hover: #21172f;
+  --purple: #a855f7;
+  --pink: #f472e8;
+  --blue: #7dd3fc;
+  --text: #f8f7ff;
+  --muted: #a5a0bc;
+  --line: #302641;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(ellipse at 50% 0%, #25123c 0%, transparent 48%),
+    var(--bg);
+  font-family: Arial, "Hiragino Kaku Gothic ProN",
+    "Noto Sans JP", sans-serif;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 4px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.page {
+  width: min(100% - 32px, 920px);
+  margin: 0 auto;
+  padding: 35px 0 65px;
+}
+
+.eyebrow {
+  color: var(--pink);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+/* トップページ */
+
+#home {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 20px;
+  text-align: center;
+  overflow: hidden;
+}
+
+.home-inner {
+  width: min(100%, 650px);
+  padding: 35px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.home-eyebrow {
+  position: relative;
+  z-index: 2;
+  margin: 0 0 34px;
+  color: var(--pink);
+  font-size: 11px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  line-height: 1.8;
+}
+
+.home-symbol {
+  position: relative;
+  z-index: 1;
+  width: 104px;
+  height: 104px;
+  flex-shrink: 0;
+  margin: 0 auto 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #b66bff88;
+  border-radius: 32px;
+  background: linear-gradient(145deg, #302044, #121426);
+  color: var(--pink);
+  font-size: 55px;
+  box-shadow: 0 0 50px #a855f722;
+  animation: float 4s ease-in-out infinite;
+}
+
+.home-title {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  margin: 0;
+  font-size: clamp(39px, 9vw, 72px);
+  font-weight: 900;
+  letter-spacing: -2px;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.home-title .sky {
+  color: var(--blue);
+}
+
+.home-title .music {
+  color: var(--pink);
+}
+
+.home-description {
+  margin: 24px 0 35px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 2;
+}
+
+.home-button {
+  padding: 16px 32px;
+  border: 1px solid #d879ff;
+  border-radius: 9px;
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  letter-spacing: 1.5px;
+  background: linear-gradient(135deg, #7c3aed, #c026d3);
+  box-shadow: 0 0 30px #a855f744;
+  transition: transform .2s, box-shadow .2s;
+}
+
+.home-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 40px #d946ef66;
+}
+
+.home-footer {
+  margin-top: 48px;
+  color: #69617f;
+  font-size: 10px;
+  letter-spacing: 3px;
+  line-height: 1.8;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+/* ライブラリ */
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.header h1 {
+  margin: 8px 0;
+  font-size: clamp(28px, 6vw, 43px);
+  letter-spacing: -1px;
+}
+
+.header-description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.header-symbol {
+  color: var(--pink);
+  font-size: 48px;
+  text-shadow: 0 0 25px #d946ef55;
+}
+
+.library-tools {
+  margin: 24px 0 16px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel);
+  color: white;
+}
+
+.search-input::placeholder {
+  color: #77718f;
+}
+
+.track-count {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.track-list {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: #0e0d18;
+}
+
+.track-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  color: var(--text);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid #272035;
+  transition: background .2s;
+}
+
+.track-row:last-child {
+  border-bottom: 0;
+}
+
+.track-row:hover,
+.track-row.selected {
+  background: var(--panel-hover);
+}
+
+.track-number {
+  width: 34px;
+  flex-shrink: 0;
+  color: #817895;
+  font-size: 12px;
+  text-align: center;
+}
+
+.track-art {
+  width: 55px;
+  height: 55px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #302044, #171426);
+  color: var(--pink);
+  font-size: 25px;
+}
+
+.track-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.track-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.track-title {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.track-subtitle {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.track-action {
+  flex-shrink: 0;
+  color: var(--pink);
+  font-size: 21px;
+}
+
+.empty-message {
+  padding: 35px 15px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+}
+
+/* 楽曲ページ */
+
+.detail-top {
+  margin-bottom: 25px;
+}
+
+.text-button {
+  padding: 9px 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.text-button:hover {
+  color: white;
+}
+
+.player {
+  padding: 23px;
+  border: 1px solid #49315f;
+  border-radius: 14px;
+  background:
+    radial-gradient(ellipse at top right, #4a1d5c44, transparent 60%),
+    var(--panel);
+}
+
+.player-heading {
+  display: flex;
+  align-items: center;
+  gap: 17px;
+}
+
+.player-art {
+  width: 115px;
+  height: 115px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 11px;
+  background: linear-gradient(135deg, #39204c, #151324);
+  color: var(--pink);
+  font-size: 45px;
+}
+
+.player-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-title {
+  margin: 8px 0;
+  font-size: clamp(19px, 4vw, 27px);
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.player-subtitle {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+audio {
+  display: block;
+  width: 100%;
+  margin-top: 22px;
+}
+
+.lyrics-toggle {
+  width: 100%;
+  margin-top: 15px;
+  padding: 13px;
+  border: 1px solid #49315f;
+  border-radius: 8px;
+  color: white;
+  background: #1b1428;
+}
+
+.lyrics-toggle:hover {
+  background: #30203e;
+}
+
+.lyrics {
+  margin-top: 18px;
+  padding: 23px 14px;
+  border-radius: 9px;
+  background: #0b0a13;
+  text-align: center;
+}
+
+.lyrics-heading {
+  margin: 0 0 25px;
+  color: var(--pink);
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+.lyric-section {
+  margin: 25px 0;
+}
+
+.lyric-section h3 {
+  margin: 0 0 11px;
+  color: #c084fc;
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.lyric-section p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 2;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.detail-footer {
+  margin-top: 22px;
+  text-align: center;
+  color: #69617f;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
+
+/* スマホ表示 */
+
+@media (max-width: 520px) {
+  #home {
+    padding: 25px 18px;
+  }
+
+  .home-inner {
+    padding: 28px 5px;
+  }
+
+  .home-eyebrow {
+    margin-bottom: 30px;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  .home-symbol {
+    width: 84px;
+    height: 84px;
+    margin-bottom: 27px;
+    border-radius: 25px;
+    font-size: 44px;
+  }
+
+  .home-title {
+    font-size: clamp(35px, 9vw, 48px);
+    letter-spacing: -1px;
+    line-height: 1.35;
+  }
+
+  .home-description {
+    margin-top: 21px;
+    margin-bottom: 30px;
+  }
+
+  .home-footer {
+    margin-top: 40px;
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  .page {
+    width: calc(100% - 24px);
+    padding-top: 24px;
+  }
+
+  .track-row {
+    gap: 9px;
+    padding: 12px 8px;
+  }
+
+  .track-number {
+    width: 27px;
+  }
+
+  .track-art {
+    width: 46px;
+    height: 46px;
+  }
+
+  .track-title {
+    font-size: 12px;
+  }
+
+  .player {
+    padding: 15px;
+  }
+
+  .player-art {
+    width: 88px;
+    height: 88px;
+  }
+}
+</style>
 </head>
 
 <body>
-  <div class="background-effects" aria-hidden="true">
-    <div class="grid-bg"></div>
-    <div class="orb orb-blue"></div>
-    <div class="orb orb-pink"></div>
-    <div class="orb orb-purple"></div>
-  </div>
 
-  <header>
-    <div class="header-inner">
-      <a class="logo" href="#home">ソライロ <span>music</span></a>
-      <nav aria-label="メインナビゲーション">
-        <a href="#home">HOME</a>
-        <a href="#music">MUSIC</a>
-        <a href="#about">ABOUT</a>
-      </nav>
+<!-- 1. ソライロMusicのトップ -->
+
+<section id="home">
+  <div class="home-inner">
+
+    <div class="home-eyebrow">
+      WELCOME TO MY MUSIC WORLD
     </div>
+
+    <div class="home-symbol">♫</div>
+
+    <h1 class="home-title">
+      <span class="sky">ソライロ</span><span class="music">Music</span>
+    </h1>
+
+    <p class="home-description">
+      音楽と出会う、自分だけのライブラリ。<br>
+      お気に入りの一曲を見つけよう。
+    </p>
+
+    <button class="home-button" id="openLibrary">
+      ♪　MUSIC LIBRARY
+    </button>
+
+    <div class="home-footer">
+      MUSIC · CREATIVITY · YOUR WORLD
+    </div>
+
+  </div>
+</section>
+
+
+<!-- 2. Music Library -->
+
+<main id="library" class="page hidden">
+
+  <header class="header">
+    <div>
+      <div class="eyebrow">SORAIRO MUSIC</div>
+      <h1>Music Library</h1>
+      <p class="header-description">
+        聴きたい曲を選んでください。<br>
+        SELECT YOUR NEXT FAVORITE SONG.
+      </p>
+    </div>
+
+    <div class="header-symbol">♫</div>
   </header>
 
-  <main>
-    <section class="hero" id="home">
-      <p class="eyebrow">ORIGINAL MUSIC COLLECTION</p>
-      <h1>ソライロ <span class="accent">music</span></h1>
-      <p class="hero-description">
-        好きな音に、溺れよう。<br>
-        日常を忘れる、音楽のための小さな場所。
-      </p>
-      <a class="hero-button" href="#music">
-        <span aria-hidden="true">▶</span> MUSIC COLLECTION
-      </a>
-    </section>
+  <div class="library-tools">
+    <input
+      id="searchInput"
+      class="search-input"
+      type="search"
+      placeholder="曲名を検索..."
+      aria-label="曲名を検索"
+    >
+  </div>
 
-    <section class="section" id="music">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">LISTEN NOW</p>
-          <h2>Music Library</h2>
-        </div>
-        <p>ORIGINAL TRACKS</p>
+  <p id="trackCount" class="track-count"></p>
+
+  <section id="trackList" class="track-list"></section>
+
+  <button class="text-button" id="homeFromLibrary">
+    ← ソライロMusicのトップへ戻る
+  </button>
+
+  <footer class="detail-footer">SORAIRO MUSIC</footer>
+</main>
+
+
+<!-- 3. 楽曲ページ -->
+
+<main id="songPage" class="page hidden">
+
+  <div class="detail-top">
+    <button class="text-button" id="backToLibrary">
+      ← Music Libraryに戻る
+    </button>
+  </div>
+
+  <section class="player">
+
+    <div class="player-heading">
+      <div class="player-art" id="playerArt">♫</div>
+
+      <div>
+        <div class="eyebrow" id="playerNumber">TRACK 001</div>
+        <h2 class="player-title" id="playerTitle"></h2>
+        <div class="player-subtitle" id="playerSubtitle"></div>
       </div>
+    </div>
 
-      <div class="music-grid">
+    <audio id="audioPlayer" controls preload="metadata">
+      お使いのブラウザでは音声を再生できません。
+    </audio>
 
-        <!-- 曲を追加するときは、この track-card を複製する -->
-<article class="track-card">
-<div class="cover" role="img" aria-label="ネオンの光をイメージした楽曲ジャケット">
-  <span class="cover-number">TRACK 001</span>
-  <span class="cover-symbol" aria-hidden="true">♡</span>
-  <span class="cover-caption">DOPAMINE / OVERLOAD</span>
-</div>
+    <button
+      id="lyricsToggle"
+      class="lyrics-toggle"
+      aria-expanded="false"
+    >
+      ＋ 歌詞を見る
+    </button>
 
-          <div class="track-info">
-            <span class="track-tag">ORIGINAL MUSIC / 001</span>
-            <h3>ドパドパ♡フェスティバル</h3>
-            <p class="track-description">
-              刺激が止まらない、ネオン色のドーパミン・パーティー。
-              音に溺れるような時間を。
-            </p>
+    <div id="lyrics" class="lyrics hidden">
+      <h3 class="lyrics-heading">LYRICS</h3>
+      <div id="lyricsContent"></div>
+    </div>
 
-            <audio controls preload="metadata">
-              <source src="ドパドパ♡フェスティバル.m4a" type="audio/mp4">
-              お使いのブラウザでは音声を再生できません。
-            </audio>
+  </section>
 
-            <div class="track-actions">
-              <button
-                class="small-button"
-                type="button"
-                aria-expanded="false"
-                aria-controls="lyrics-001"
-                onclick="toggleLyrics(this)">
-                ♡ 歌詞を表示
-              </button>
-            </div>
+  <footer class="detail-footer">SORAIRO MUSIC</footer>
+</main>
 
 
-<div class="lyrics" id="lyrics-001" hidden>
+<script>
+/*
+  曲を増やすときは tracks に追加します。
+  音源とジャケット画像は index.html と同じフォルダに置きます。
+*/
 
-  <h3>INTRO</h3>
-  <p>
-    ピピピ！　ピコピコ！　ご機嫌いかが？<br>
-    脳内フェスティバル、本日も開催！<br>
-    ミュートは禁言！　退場はナシ！<br>
-    せーのっ！　ハイになっちゃえ！
-  </p>
+const tracks = [
+  {
+    title: "ドパドパ♡フェスティバル",
+    subtitle: "ORIGINAL SONG",
+    audio: "ドパドパ♡フェスティバル.m4a",
+    cover: "ドパドパ♡画像.jpg",
 
-  <h3>VERSE 1</h3>
-  <p>
-    起床三秒　画面にダイブ<br>
-    寝癖のまんまで世界をジャック<br>
-    おすすめ欄からドーパミン配達<br>
-    脳みそ宛なら受け取り拒否ナシ！
-  </p>
-  <p>
-    昨日の神曲　今日はもうスキップ<br>
-    感動したって三秒で既読<br>
-    誰かの炎上　みんなで鑑賞<br>
-    はいはい今日も平和で最高！
-  </p>
-  <p>
-    右手でスワイプ　左手でハート<br>
-    知らない誰かに「わかる」の連打<br>
-    反対意見にも「わかる！」を連打<br>
-    自分の意見はどこだっけ？
-  </p>
+    lyrics: [
+      {
+        section: "INTRO",
+        text: `ピピピ！ ピコピコ！ ごきげんいかが？
+脳内フェスティバル、本日も開催！
+ミュートは禁言！ 退場はナシ！
+せーのっ！ ハイになっちゃえ！`
+      },
+      {
+        section: "VERSE 1",
+        text: `起床三秒　画面にダイブ
+寝癖のまんまで世界をジャック
+おすすめ欄からドーパミン配達
+脳みそ宛なら受け取り拒否ナシ！
 
-  <h3>PRE-CHORUS 1</h3>
-  <p>
-    もっと速く！　もっと派手に！<br>
-    もっと強く！　もっとヤバめに！<br>
-    一個じゃ足りない　二個でも足りない<br>
-    脳内在庫が品切れ寸前！
-  </p>
-  <p>
-    ねえねえねえねえ　次は何？<br>
-    見逃したら損じゃない？<br>
-    秒で消費して　秒で忘れて<br>
-    次！　次！　次！　次！
-  </p>
+昨日の神曲　今日はもうスキップ
+感動したって三秒で既読
+誰かの炎上　みんなで鑑賞
+はいはい今日も平和で最高！
 
-  <h3>CHORUS 1</h3>
-  <p>
-    まだ足りない！　まだ足りない！<br>
-    脳みそいっぱいじゃ足りない！<br>
-    もっと！　もっと！　もっとちょうだい！<br>
-    世界最速で飽きていたい！
-  </p>
-  <p>
-    まだ足りない！　まだ足りない！<br>
-    退屈なんかに用はない！<br>
-    あはは！　あはは！　あはははは！<br>
-    脳内パーティーは終わらない！
-  </p>
-  <p>
-    いいね！　バズれ！　踊れ！　騒げ！<br>
-    感情まとめてタイムラインへ！<br>
-    まだ足りない！　まだ足りない！<br>
-    次の刺激を持ってこーい！
-  </p>
+右手でスワイプ　左手でハート
+知らない誰かに「わかる」の連打
+反対意見にも「わかる！」を連打
+自分の意見はどこだっけ？`
+      },
+      {
+        section: "PRE-CHORUS 1",
+        text: `もっと速く！　もっと派手に！
+もっと強く！　もっとヤバめに！
+一個じゃ足りない　二個でも足りない
+脳内在庫が品切れ寸前！
 
-  <h3>INTERLUDE</h3>
+ねえねえねえねえ　次は何？
+見逃したら損じゃない？
+秒で消費して　秒で忘れて
+次！　次！　次！　次！`
+      },
+      {
+        section: "CHORUS 1",
+        text: `まだ足りない！　まだ足りない！
+脳みそいっぱいじゃ足りない！
+もっと！　もっと！　もっとちょうだい！
+世界最速で飽きていたい！
 
-  <h3>VERSE 2</h3>
-  <p>
-    通知の赤丸　消したら負け？<br>
-    知らない話題も知らなきゃ負け？<br>
-    流行りの波には乗るしかないし<br>
-    三日前のブームはもう古いし！
-  </p>
-  <p>
-    「それな！」って言えば仲間になれる<br>
-    草でも生やせば空気が和める<br>
-    本音はどこかに置き忘れたけど<br>
-    どこで落とした？　まあいっか！
-  </p>
-  <p>
-    誰かの失敗　誰かの正義<br>
-    さっきの正義はどこへやら？<br>
-    スクロール　スクロール　指だけ進む<br>
-    あれ、なんで笑ったんだっけ？
-  </p>
+まだ足りない！　まだ足りない！
+退屈なんかに用はない！
+あはは！　あはは！　あはははは！
+脳内パーティーは終わらない！
 
-  <h3>PRE-CHORUS 2</h3>
-  <p>
-    もっと笑って！　もっと騒いで！<br>
-    もっと強烈なのをちょうだい！<br>
-    さっきの刺激じゃもう足りない<br>
-    慣れちゃったの？　ねえ、つまんない！
-  </p>
-  <p>
-    嫌い！　嫌い！　でも見ちゃう！<br>
-    無理！　無理！　でも欲しい！<br>
-    笑えないのに笑ってる<br>
-    次を探す手が止まらない！
-  </p>
+いいね！　バズれ！　踊れ！　騒げ！
+感情まとめてタイムラインへ！
+まだ足りない！　まだ足りない！
+次の刺激を持ってこーい！`
+      },
+      {
+        section: "INTERLUDE",
+        text: `（インストゥルメンタル）`
+      },
+      {
+        section: "VERSE 2",
+        text: `通知の赤丸　消したら負け？
+知らない話題も知らなきゃ負け？
+流行りの波には乗るしかないし
+三日前のブームはもう古いし！
 
-  <h3>CHORUS 2</h3>
-  <p>
-    まだ足りない！　まだ足りない！<br>
-    空っぽなんて認めない！<br>
-    もっと！　もっと！　もっとちょうだい！<br>
-    退屈する暇なんかない！
-  </p>
-  <p>
-    まだ足りない！　まだ足りない！<br>
-    楽しい以外は知らない！<br>
-    あはは！　あはは！　あはははは！<br>
-    脳内パーティーは終わらない！
-  </p>
-  <p>
-    いいね！　バズれ！　踊れ！　騒げ！<br>
-    世界の全部をタイムラインへ！<br>
-    まだ足りない！　まだ足りない！<br>
-    ねえ、次は何をくれるの？
-  </p>
+「それな！」って言えば仲間になれる
+草でも生やせば空気が和める
+本音はどこかに置き忘れたけど
+どこで落とした？　まあいっか！
 
-  <h3>BRIDGE</h3>
-  <p>……あれ？</p>
-  <p>今、何してたっけ。</p>
-  <p>光る画面と　知らない部屋</p>
-  <p>
-    さっきまで<br>
-    笑ってた、よね？
-  </p>
-  <p>……なんでだっけ。</p>
-  <p>
-    指先だけが　まだ動いてる<br>
-    笑ったはずなのに　何も残らない
-  </p>
-  <p>
-    画面の向こうは　今日も大騒ぎ<br>
-    私の部屋だけ　音がしない
-  </p>
-  <p>私は？</p>
-  <p>……私は、何を。</p>
-  <p>
-    画面が暗くなる<br>
-    そこに映った<br>
-    知らない顔
-  </p>
-  <p>……ねえ。</p>
-  <p>ここ、こんなに静かだった？</p>
-  <p>ピコン♪</p>
-  <p>
-    ……あ。<br>
-    まだ、見てない。<br>
-    あは。
-  </p>
+誰かの失敗　誰かの正義
+さっきの正義はどこへやら？
+スクロール　スクロール　指だけ進む
+あれ、なんで笑ったんだっけ？`
+      },
+      {
+        section: "PRE-CHORUS 2",
+        text: `もっと笑って！　もっと騒いで！
+もっと強烈なのをちょうだい！
+さっきの刺激じゃもう足りない
+慣れちゃったの？　ねえ、つまんない！
 
-  <h3>FINAL CHORUS</h3>
-  <p>
-    まだ足りない！　まだ足りない！<br>
-    空っぽだって構わない！<br>
-    もっと！　もっと！　もっとちょうだい！<br>
-    何も考えられなくなるくらい！
-  </p>
-  <p>
-    まだ足りない！　まだ足りない！<br>
-    終わり方なんて知らない！<br>
-    あはは！　あはは！　あはははは！<br>
-    脳内パーティーは終わらない！
-  </p>
-  <p>
-    まだ足りない！　まだ足りない！<br>
-    笑って！　笑って！　笑ってよ！<br>
-    もっと！　もっと！　もっとちょうだい！<br>
-    静かになんてしないでよ！
-  </p>
-  <p>
-    まだ足りない！　まだ足りない！<br>
-    ねえ、ねえ、ねえ、ねえ、聞いてる？<br>
-    あはは！　あはは！　あはははは！<br>
-    脳内パーティーは終わらない！
-  </p>
+嫌い！　嫌い！　でも見ちゃう！
+無理！　無理！　でも欲しい！
+笑えないのに笑ってる
+次を探す手が止まらない！`
+      },
+      {
+        section: "CHORUS 2",
+        text: `まだ足りない！　まだ足りない！
+空っぽなんて認めない！
+もっと！　もっと！　もっとちょうだい！
+退屈する暇なんかない！
 
-  <h3>OUTRO</h3>
-  <p>
-    ピピピ！　ピコピコ！　ご機嫌いかが？<br>
-    本日のパーティー、間もなく終了！
-  </p>
-  <p>……なんてね。</p>
-  <p>まだ、足りない。</p>
-  <p>……ねえ。</p>
-  <p>次、まだ？</p>
+まだ足りない！　まだ足りない！
+楽しい以外は知らない！
+あはは！　あはは！　あはははは！
+脳内パーティーは終わらない！
 
-</div>
-          </div>
-        </article>
+いいね！　バズれ！　踊れ！　騒げ！
+世界の全部をタイムラインへ！
+まだ足りない！　まだ足りない！
+ねえ、次は何をくれるの？`
+      },
+      {
+        section: "BRIDGE",
+        text: `……あれ？
 
-      </div>
-    </section>
+今、何してたっけ。
 
-    <section class="section" id="about">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">MORE TO COME</p>
-          <h2>Next Tracks</h2>
-        </div>
-      </div>
+光る画面と　知らない部屋
 
-      <div class="coming-soon">
-        <strong>NEW MUSIC LOADING...</strong>
-        <p>新しい音楽がここに追加されていきます。</p>
-      </div>
-    </section>
-  </main>
+さっきまで
+笑ってた、よね？
 
-  <footer>
-    <p><span>ソライロ music</span> ・ ORIGINAL MUSIC</p>
-    <p>Made with sound and imagination.</p>
-  </footer>
+……なんでだっけ。
 
-  <script>
-    function toggleLyrics(button) {
-      const lyricsId = button.getAttribute("aria-controls");
-      const lyrics = document.getElementById(lyricsId);
-      const isOpening = lyrics.hidden;
+指先だけが　まだ動いてる
+笑ったはずなのに　何も残らない
 
-      lyrics.hidden = !isOpening;
-      button.setAttribute("aria-expanded", String(isOpening));
-      button.textContent = isOpening ? "♡ 歌詞を閉じる" : "♡ 歌詞を表示";
+画面の向こうは　今日も大騒ぎ
+私の部屋だけ　音がしない
+
+私は？
+
+……私は、何を。
+
+画面が暗くなる
+そこに映った
+知らない顔
+
+……ねえ。
+
+ここ、こんなに静かだった？
+
+ピコン♪
+
+……あ。
+まだ、見てない。
+あは。`
+      },
+      {
+        section: "FINAL CHORUS",
+        text: `まだ足りない！　まだ足りない！
+空っぽだって構わない！
+もっと！　もっと！　もっとちょうだい！
+何も考えられなくなるくらい！
+
+まだ足りない！　まだ足りない！
+終わり方なんて知らない！
+あはは！　あはは！　あはははは！
+脳内パーティーは終わらない！
+
+まだ足りない！　まだ足りない！
+笑って！　笑って！　笑ってよ！
+もっと！　もっと！　もっとちょうだい！
+静かになんてしないでよ！
+
+まだ足りない！　まだ足りない！
+ねえ、ねえ、ねえ、ねえ、聞いてる？
+あはは！　あはは！　あはははは！
+脳内パーティーは終わらない！`
+      },
+      {
+        section: "OUTRO",
+        text: `ピピピ！　ピコピコ！　ご機嫌いかが？
+本日のパーティー、間もなく終了！
+
+……なんてね。
+
+まだ、足りない。
+
+……ねえ。
+
+次、まだ？`
+      }
+    ]
+  }
+];
+
+
+/* ページ切り替え */
+
+const home = document.getElementById("home");
+const library = document.getElementById("library");
+const songPage = document.getElementById("songPage");
+
+function showPage(page) {
+  home.classList.add("hidden");
+  library.classList.add("hidden");
+  songPage.classList.add("hidden");
+
+  page.classList.remove("hidden");
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
+document.getElementById("openLibrary").addEventListener("click", () => {
+  showPage(library);
+});
+
+document.getElementById("homeFromLibrary").addEventListener("click", () => {
+  showPage(home);
+});
+
+document.getElementById("backToLibrary").addEventListener("click", () => {
+  document.getElementById("audioPlayer").pause();
+  showPage(library);
+});
+
+
+/* 曲リスト */
+
+const trackList = document.getElementById("trackList");
+const trackCount = document.getElementById("trackCount");
+const searchInput = document.getElementById("searchInput");
+
+let selectedTrackIndex = null;
+
+function renderTrackList() {
+  const keyword = searchInput.value.trim().toLowerCase();
+
+  const filteredTracks = tracks
+    .map((track, index) => ({ track, index }))
+    .filter(item =>
+      item.track.title.toLowerCase().includes(keyword)
+    );
+
+  trackCount.textContent =
+    `${filteredTracks.length} TRACK${filteredTracks.length === 1 ? "" : "S"}`;
+
+  trackList.replaceChildren();
+
+  if (filteredTracks.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty-message";
+    empty.textContent = "曲が見つかりませんでした。";
+    trackList.appendChild(empty);
+    return;
+  }
+
+  filteredTracks.forEach(({ track, index }) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "track-row";
+
+    if (selectedTrackIndex === index) {
+      button.classList.add("selected");
     }
-  </script>
+
+    const number = document.createElement("span");
+    number.className = "track-number";
+    number.textContent = String(index + 1).padStart(3, "0");
+
+    const art = document.createElement("span");
+    art.className = "track-art";
+
+    if (track.cover) {
+      const image = document.createElement("img");
+      image.src = track.cover;
+      image.alt = "";
+
+      image.onerror = () => {
+        art.replaceChildren();
+        art.textContent = "♫";
+      };
+
+      art.appendChild(image);
+    } else {
+      art.textContent = "♫";
+    }
+
+    const info = document.createElement("span");
+    info.className = "track-info";
+
+    const title = document.createElement("span");
+    title.className = "track-title";
+    title.textContent = track.title;
+
+    const subtitle = document.createElement("div");
+    subtitle.className = "track-subtitle";
+    subtitle.textContent = track.subtitle || "ORIGINAL SONG";
+
+    info.append(title, subtitle);
+
+    const action = document.createElement("span");
+    action.className = "track-action";
+    action.textContent = selectedTrackIndex === index ? "●" : "▶";
+
+    button.append(number, art, info, action);
+
+    button.addEventListener("click", () => {
+      selectTrack(index);
+    });
+
+    trackList.appendChild(button);
+  });
+}
+
+
+/* 曲を選ぶ */
+
+const playerArt = document.getElementById("playerArt");
+const playerNumber = document.getElementById("playerNumber");
+const playerTitle = document.getElementById("playerTitle");
+const playerSubtitle = document.getElementById("playerSubtitle");
+const audioPlayer = document.getElementById("audioPlayer");
+
+const lyricsToggle = document.getElementById("lyricsToggle");
+const lyricsBox = document.getElementById("lyrics");
+const lyricsContent = document.getElementById("lyricsContent");
+
+function selectTrack(index) {
+  const track = tracks[index];
+
+  selectedTrackIndex = index;
+
+  playerNumber.textContent =
+    `TRACK ${String(index + 1).padStart(3, "0")}`;
+
+  playerTitle.textContent = track.title;
+  playerSubtitle.textContent = track.subtitle || "ORIGINAL SONG";
+
+  playerArt.replaceChildren();
+
+  if (track.cover) {
+    const image = document.createElement("img");
+    image.src = track.cover;
+    image.alt = `${track.title}のジャケット`;
+
+    image.onerror = () => {
+      playerArt.replaceChildren();
+      playerArt.textContent = "♫";
+    };
+
+    playerArt.appendChild(image);
+  } else {
+    playerArt.textContent = "♫";
+  }
+
+  audioPlayer.pause();
+  audioPlayer.src = track.audio;
+  audioPlayer.load();
+
+  lyricsBox.classList.add("hidden");
+  lyricsToggle.textContent = "＋ 歌詞を見る";
+  lyricsToggle.setAttribute("aria-expanded", "false");
+
+  renderLyrics(track.lyrics || []);
+  renderTrackList();
+
+  showPage(songPage);
+}
+
+
+/* 歌詞 */
+
+function renderLyrics(sections) {
+  lyricsContent.replaceChildren();
+
+  if (sections.length === 0) {
+    const message = document.createElement("p");
+    message.className = "muted";
+    message.textContent = "この曲の歌詞はまだ登録されていません。";
+    lyricsContent.appendChild(message);
+    return;
+  }
+
+  sections.forEach(section => {
+    const container = document.createElement("section");
+    container.className = "lyric-section";
+
+    const heading = document.createElement("h3");
+    heading.textContent = section.section;
+
+    const text = document.createElement("p");
+    text.textContent = section.text;
+
+    container.append(heading, text);
+    lyricsContent.appendChild(container);
+  });
+}
+
+lyricsToggle.addEventListener("click", () => {
+  const willOpen = lyricsBox.classList.contains("hidden");
+
+  lyricsBox.classList.toggle("hidden", !willOpen);
+
+  lyricsToggle.textContent = willOpen
+    ? "－ 歌詞を閉じる"
+    : "＋ 歌詞を見る";
+
+  lyricsToggle.setAttribute("aria-expanded", String(willOpen));
+});
+
+
+/* 検索 */
+
+searchInput.addEventListener("input", renderTrackList);
+
+
+/* 初期表示 */
+
+renderTrackList();
+</script>
+
 </body>
 </html>
